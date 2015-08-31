@@ -1,4 +1,4 @@
-/* JavaScript Document*/
+ï»¿/* JavaScript Document*/
 
 /*size of big square*/
 var sizeBigSquare = 380
@@ -30,7 +30,7 @@ var div_array=[]
 var pic=["dongqianhu.jpg", "dongqianhu2.jpg", "yuhang.jpg", "quanjing.jpg", "beilunyangshashan.jpg", "nantanglaojie.jpg", "heyidadao.jpg", "waitandaqiao.jpg", "tianyige.jpg", "ningbodayangba.jpg", "ningbodeshan.jpg", "ningbojiaowai.jpg", "jiuzhaopian.jpg", "xikou.jpg", "shengyuan.jpg", "meishuguan.jpg", "laowaitan.jpg", "gulou.jpg"] 
 
 /*text of explanation to the corresponding photo*/
-var text=["¶«Ç®ºþ", "¶«Ç®ºþ", "Óàº¼", "È«¾°", "±±ÂØÑóÉ³É½", "ÄÏÌÁÀÏ½Ö", "ºÍÒå´óµÀ", "ÍâÌ²´óÇÅ", "ÌìÒ»¸ó", "Äþ²¨´óÑõ°É", "Äþ²¨µÄÉ½", "Äþ²¨½¼Íâ", "¾ÉÕÕÆ¬", "Ïª¿Ú", "Ê¢Ô°", "ÃÀÊõ¹Ý", "ÀÏÍâÌ²", "¹ÄÂ¥"]
+var text=["ä¸œé’±æ¹–", "ä¸œé’±æ¹–", "ä½™æ­", "å…¨æ™¯", "åŒ—ä»‘æ´‹æ²™å±±", "å—å¡˜è€è¡—", "å’Œä¹‰å¤§é“", "å¤–æ»©å¤§æ¡¥", "å¤©ä¸€é˜", "å®æ³¢å¤§æ°§å§", "å®æ³¢çš„å±±", "å®æ³¢éƒŠå¤–", "æ—§ç…§ç‰‡", "æºªå£", "ç››å›­", "ç¾Žæœ¯é¦†", "è€å¤–æ»©", "é¼“æ¥¼"]
 
 /*global variable for the counter ID*/
 var counter
@@ -139,6 +139,8 @@ function pos(image_layer){
 	document.getElementById('pop').style.display="block"
 	document.getElementById('pop').getElementsByTagName('h1')[0].innerHTML=text[id]
 	document.getElementById('pop').getElementsByTagName('div')[0].innerHTML=text[id]
+  
+  document.getElementById('background_layer').style.zIndex=2;
 	
 	i=0;
   /*clear last counter if needed*/
@@ -149,7 +151,7 @@ function pos(image_layer){
     function(){
       i+=0.015
       document.getElementById('background_layer').style.cssText+='filter:alpha(opacity='+i*100+');-moz-opacity:'+i+';-khtml-opacity: '+i+';opacity: '+i+';'
-      if(i>=0.9)
+      if(i>=1)
         clearInterval(counter)
     },30
   )
@@ -160,7 +162,7 @@ function pos(image_layer){
 /*close the pop show*/
 function closeShow(counterNumber){
 	document.getElementById('pop').style.display="none"
-	document.getElementById('background_layer').style.cssText+='filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0; opacity:0;'
+	document.getElementById('background_layer').style.cssText+='filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0; opacity:0;z-index:-1;'
   clearInterval(counterNumber)
 }
 	
