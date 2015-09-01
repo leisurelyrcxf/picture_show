@@ -77,6 +77,7 @@ function initialize(){
   }
   widthBigSquare = 2*widthSmallSquare+indence
   heightBigSquare = 2*heightSmallSquare+indence
+  alert(widthBigSquare + ", "+heightBigSquare)
   maxHeightWidthRatioForNormalSize = heightBigSquare/widthBigSquare*1.5
   maxWidthHeightRatioForNormalSize = widthBigSquare/heightBigSquare*1.5
   maxNumOfBigSquareInARow = Math.floor(window.screen.width/widthBigSquare)
