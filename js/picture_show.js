@@ -180,6 +180,7 @@ function initialize(){
       }
     }else if(e.detail){  //Firefox滑轮事件  
       if (e.detail>= 0){ //当滑轮向上滚动时  
+        alert(1)
         return
       }
     }
