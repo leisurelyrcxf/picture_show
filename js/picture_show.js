@@ -134,6 +134,8 @@ function fillContainer(){
   }
   scrollFlag=true
   //tForTimeOut = setTimeout(function(){scrollFlag=true},300);
+  
+  
 }
 
 /*initialize*/
@@ -158,41 +160,57 @@ function initialize(){
   loadRowNumPerTime=window.screen.height/heightBigSquare+1
   loadNumPerTime=Math.floor(loadRowNumPerTime*maxNumOfBigSquareInARow)
 
-  
+  /*deprecated
   var scrollFunc = function(){ 
     if(scrollFlag){ 
       //clearTimeout(tForTimeOut)
       scrollFlag=false
       if(divArray.length<n)
-        loadImages(loadNumPerTime, true)
+        loadImages(Math.round(loadNumPerTime*1.5), true)
     }
   }
   
-  window.onscroll = scrollFunc
-
+  //window.onscroll = scrollFunc
+  */
   
   
-  var wheelFunc = function (e) {  
-    e = e || window.event;  
-    if(e.wheelDelta){  //判断浏览器IE，谷歌滑轮事件               
-      if(e.wheelDelta>=0){ //当滑轮向上滚动时  
-          return 
+  var wheelFunc = function (e) {
+    if(scrollFlag){
+      e = e || window.event;  
+      if(e.wheelDelta){  //判断浏览器IE，谷歌滑轮事件               
+        if(e.wheelDelta<=0){ //当滑轮向上滚动时
+           if ($(document).scrollTop() >= $(document).height() - $(window).height()){
+            if(divArray.length<n){
+              scrollFlag=false
+              document.body.scrollTop=document.body.scrollTop-window.screen.height/2
+              loadImages(Math.round(loadNumPerTime+2), true)
+            }
+          }
+        }
+      }else if(e.detail){  //Firefox滑轮事件  
+        if (e.detail>=0){ //当滑轮向上滚动时  
+          if ($(document).scrollTop() >= $(document).height() - $(window).height()){  //scroll在页面底部
+            if(divArray.length<n){
+              scrollFlag=false
+              document.documentElement.scrollTop=document.documentElement.scrollTop-window.screen.height/2
+              loadImages(Math.round(loadNumPerTime+2), true)
+            }
+          }
+        }
       }
-    }else if(e.detail){  //Firefox滑轮事件  
-      if (e.detail>= 0){ //当滑轮向上滚动时  
-        return
-      }
-    }
-    if(getScrollTop() + getWindowHeight() == getScrollHeight()){  //scroll在页面底部
-      scrollFunc()
     }
   }
+  
+  
   
   if (document.addEventListener) {//firefox  
     document.addEventListener('DOMMouseScroll', wheelFunc, false);  
-  }  
-  //滚动滑轮触发scrollFunc方法  //ie 谷歌  
-  window.onmousewheel = document.onmousewheel = wheelFunc;  
+  }
+  if(window.onmousewheel){
+    window.onmousewheel = wheelFunc
+  }else{
+    document.onmousewheel = wheelFunc 
+  }
   
   
   topRelative=0
@@ -467,7 +485,7 @@ function randomShuffle(){
 
 /*pop show*/
 function pos(imageElement, fadeAwayFlag){
-  var scrollTop=Math.max(document.documentElement.scrollTop,document.body.scrollTop)
+  //var scrollTop=Math.max(document.documentElement.scrollTop,document.body.scrollTop)
   originalWidth=imageElement.naturalWidth
   originalHeight=imageElement.naturalHeight
   windowWidth=window.innerWidth
