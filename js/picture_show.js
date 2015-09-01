@@ -132,8 +132,8 @@ function fillContainer(){
   else{
     document.getElementById('image_container').style.height=(rowNumber)*(heightBigSquare+indence)-indence+2*padding+"px"
   }
-  
-  tForTimeOut = setTimeout(function(){scrollFlag=true},300);
+  scrollFlag=true
+  //tForTimeOut = setTimeout(function(){scrollFlag=true},300);
 }
 
 /*initialize*/
@@ -161,9 +161,10 @@ function initialize(){
   
   var scrollFunc = function(){ 
     if(scrollFlag){ 
-      clearTimeout(tForTimeOut)
+      //clearTimeout(tForTimeOut)
       scrollFlag=false
-      loadImages(loadNumPerTime, true)
+      if(divArray.length<n)
+        loadImages(loadNumPerTime, true)
     }
   }
   
