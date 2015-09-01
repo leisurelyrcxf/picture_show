@@ -1,7 +1,7 @@
 ﻿/* JavaScript Document*/
 
 /*list of block size combination*/
-sizeList=[[160,Math.floor(160*100/160)], [200,Math.floor(200*100/160)], [320,200]]
+sizeList=[[320,200], [200,Math.floor(200*100/160)]]
 
 /*size of small square*/
 var widthSmallSquare
@@ -29,8 +29,6 @@ var maxWidthHeightRatioForNormalSize
 /*global variable for the counter ID*/
 var counter
 
-var tForTimeOut
-
 /*left position of each div of image*/
 var left=padding
 
@@ -55,6 +53,8 @@ var lastWidth
 /*index of current processing image*/
 var currentIdx=0
 
+var currentIdxOffset=0
+
 /*number of row loaded per time*/
 var loadRowNumPerTime
 
@@ -76,39 +76,6 @@ var divArray=[]
 /*initiazie div array*/
 initialize()
 
-function getScrollTop(){
-  var scrollTop = 0, bodyScrollTop = 0, documentScrollTop = 0;
-  if(document.body){
-    bodyScrollTop = document.body.scrollTop;
-  }
-  if(document.documentElement){
-    documentScrollTop = document.documentElement.scrollTop;
-  }
-　scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop;
-  return scrollTop;
-}
-//文档的总高度
-function getScrollHeight(){
-  var scrollHeight = 0, bodyScrollHeight = 0, documentScrollHeight = 0;
-  if(document.body){
-    bodyScrollHeight = document.body.scrollHeight;
-　}
-  if(document.documentElement){
-　　documentScrollHeight = document.documentElement.scrollHeight;
-　}
-　scrollHeight = (bodyScrollHeight - documentScrollHeight > 0) ? bodyScrollHeight : documentScrollHeight;
-  return scrollHeight;
-}
-//浏览器视口的高度
-function getWindowHeight(){
-  var windowHeight = 0;
-  if(document.compatMode == "CSS1Compat"){
-  windowHeight = document.documentElement.clientHeight;
-  }else{
-    windowHeight = document.body.clientHeight;
-  }
-  return windowHeight;
-}
 
 /*fill divs in container*/
 function fillContainer(){
@@ -126,6 +93,7 @@ function fillContainer(){
       document.getElementById('image_container').appendChild(divArray[currentIdx])
     }
   }
+  currentIdxOffset=divArray.length-currentIdx
   
   if(hasImageInRow)
     document.getElementById('image_container').style.height=(rowNumber+1)*(heightBigSquare+indence)-indence+2*padding+"px"
@@ -133,15 +101,13 @@ function fillContainer(){
     document.getElementById('image_container').style.height=(rowNumber)*(heightBigSquare+indence)-indence+2*padding+"px"
   }
   scrollFlag=true
-  //tForTimeOut = setTimeout(function(){scrollFlag=true},300);
-  
   
 }
 
 /*initialize*/
 function initialize(){
   randomShuffle()
-  idx=Math.round(Math.random()*(sizeList.length-1))
+  idx=Math.round(Math.random()*(sizeList.length-2))
   /*size of small square*/
   widthSmallSquare = sizeList[idx][0]
   heightSmallSquare = sizeList[idx][1]
@@ -178,24 +144,15 @@ function initialize(){
     if(scrollFlag){
       e = e || window.event;  
       if(e.wheelDelta){  //判断浏览器IE，谷歌滑轮事件               
-        if(e.wheelDelta<=0){ //当滑轮向上滚动时
-           if ($(document).scrollTop() >= $(document).height() - $(window).height()){
-            if(divArray.length<n){
-              scrollFlag=false
-              document.body.scrollTop=document.body.scrollTop-window.screen.height/2
-              loadImages(Math.round(loadNumPerTime+2), true)
-            }
-          }
+        if(e.wheelDelta<=0 && currentIdxOffset==divArray.length-currentIdx && divArray.length<n){ //当滑轮向上滚动时
+          //if ($(document).scrollTop() >= $(document).height() - $(window).height()*)
+          scrollFlag=false
+          loadImages(Math.round(loadNumPerTime+2), true)
         }
       }else if(e.detail){  //Firefox滑轮事件  
-        if (e.detail>=0){ //当滑轮向上滚动时  
-          if ($(document).scrollTop() >= $(document).height() - $(window).height()){  //scroll在页面底部
-            if(divArray.length<n){
-              scrollFlag=false
-              document.documentElement.scrollTop=document.documentElement.scrollTop-window.screen.height/2
-              loadImages(Math.round(loadNumPerTime+2), true)
-            }
-          }
+        if (e.detail>=0 && currentIdxOffset==divArray.length-currentIdx && divArray.length<n){ //当滑轮向上滚动时  
+          scrollFlag=false
+          loadImages(Math.round(loadNumPerTime+2), true)
         }
       }
     }
