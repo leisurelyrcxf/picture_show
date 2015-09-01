@@ -29,6 +29,8 @@ var maxWidthHeightRatioForNormalSize
 /*global variable for the counter ID*/
 var counter
 
+var tForTimeOut
+
 /*left position of each div of image*/
 var left=padding
 
@@ -130,6 +132,8 @@ function fillContainer(){
   else{
     document.getElementById('image_container').style.height=(rowNumber)*(heightBigSquare+indence)-indence+2*padding+"px"
   }
+  
+  tForTimeOut = setTimeout(function(){scrollFlag=true},300);
 }
 
 /*initialize*/
@@ -157,12 +161,9 @@ function initialize(){
   
   var scrollFunc = function(){ 
     if(scrollFlag){ 
+      clearTimeout(tForTimeOut)
       scrollFlag=false
       loadImages(loadNumPerTime, true)
-      setTimeout(function(){
-        scrollFlag=true
-        },500
-      )
     }
   }
   
