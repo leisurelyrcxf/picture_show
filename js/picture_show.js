@@ -465,6 +465,7 @@ function randomShuffle(){
 
 /*pop show*/
 function pos(imageElement, fadeAwayFlag){
+  //alert(1)
   var scrollTop=Math.max(document.documentElement.scrollTop,document.body.scrollTop)
   originalWidth=imageElement.naturalWidth
   originalHeight=imageElement.naturalHeight
@@ -497,14 +498,15 @@ function pos(imageElement, fadeAwayFlag){
   document.getElementById('pop').style.display="block"
   
   document.getElementById('background_layer').style.zIndex=2;
-  document.getElementById('close').setAttribute('onclick','closeShow('+counter+')')
+  
+  
   
   
   if(fadeAwayFlag){
     i=0;
+    
     /*clear last counter if needed*/
     clearInterval(counter)
-    
     /*interval for the fading away effect*/
     counter=setInterval(
       function(){
@@ -515,14 +517,14 @@ function pos(imageElement, fadeAwayFlag){
       },30
     )
   }
-  
+  document.getElementById('close').setAttribute('onclick','closeShow('+counter+')')
 }
 
 /*close the pop show*/
 function closeShow(counterNumber){
   document.getElementById('pop').style.display="none"
-  document.getElementById('background_layer').style.cssText+='filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0; opacity:0;z-index:-1;'
   clearInterval(counterNumber)
+  document.getElementById('background_layer').style.cssText+='filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0; opacity:0;z-index:-1;'
 }
   
 /*getting dark when mouseover*/
