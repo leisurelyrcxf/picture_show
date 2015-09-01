@@ -1,10 +1,17 @@
 ﻿/* JavaScript Document*/
 
-/*size of big square*/
-var sizeBigSquare = 380
+/*list of block size combination*/
+sizeList=[[160,160*100/160], [200,200*100/160], [320,200]]
 
 /*size of small square*/
-var sizeSmallSquare = 190
+var widthSmallSquare
+var heightSmallSquare
+
+/*size of big square*/
+var widthBigSquare
+var heightBigSquare
+
+var maxNumOfBigSquareInARow
 
 /*size of indence*/
 var indence = 10
@@ -12,25 +19,8 @@ var indence = 10
 /*size of padding*/
 var padding = 15
 
-/*difference combination of square size*/
-var total_array=[ 
-                  [sizeSmallSquare,sizeSmallSquare,sizeBigSquare+indence,sizeSmallSquare,sizeSmallSquare,sizeBigSquare+indence],
-                  [sizeSmallSquare,sizeSmallSquare,sizeSmallSquare,sizeSmallSquare,sizeBigSquare+indence,sizeBigSquare+indence],
-                  [sizeBigSquare+indence,sizeBigSquare+indence,sizeBigSquare+indence],
-                  [sizeSmallSquare,sizeSmallSquare,sizeBigSquare+indence,sizeBigSquare+indence,sizeSmallSquare,sizeSmallSquare],
-                  [sizeBigSquare+indence,sizeBigSquare+indence,sizeSmallSquare,sizeSmallSquare,sizeSmallSquare,sizeSmallSquare],
-                  [sizeBigSquare+indence,sizeSmallSquare,sizeSmallSquare,sizeSmallSquare,sizeSmallSquare,sizeBigSquare+indence], 
-                  [sizeBigSquare+indence,sizeSmallSquare,sizeSmallSquare,sizeBigSquare+indence,sizeSmallSquare,sizeSmallSquare],
-                  [sizeSmallSquare, sizeSmallSquare, sizeSmallSquare, sizeSmallSquare, sizeSmallSquare, sizeSmallSquare, sizeSmallSquare, sizeSmallSquare, sizeSmallSquare, sizeSmallSquare, sizeSmallSquare, sizeSmallSquare]
-                ]
-/*global array of divs of images*/
-var div_array=[]
-
-/*file name array*/
-var pic=["dongqianhu.jpg", "dongqianhu2.jpg", "yuhang.jpg", "quanjing.jpg", "beilunyangshashan.jpg", "nantanglaojie.jpg", "heyidadao.jpg", "waitandaqiao.jpg", "tianyige.jpg", "ningbodayangba.jpg", "ningbodeshan.jpg", "ningbojiaowai.jpg", "jiuzhaopian.jpg", "xikou.jpg", "shengyuan.jpg", "meishuguan.jpg", "laowaitan.jpg", "gulou.jpg"] 
-
-/*text of explanation to the corresponding photo*/
-var text=["东钱湖", "东钱湖", "余杭", "全景", "北仑洋沙山", "南塘老街", "和义大道", "外滩大桥", "天一阁", "宁波大氧吧", "宁波的山", "宁波郊外", "旧照片", "溪口", "盛园", "美术馆", "老外滩", "鼓楼"]
+var maxHeightWidthRatioForNormalSize
+var maxWidthHeightRatioForNormalSize
 
 /*global variable for the counter ID*/
 var counter
@@ -41,67 +31,242 @@ var left=padding
 /*top position of each div of image*/
 var topp=padding
 
+var topRelative
+
+var maxOfLeft
+
 /*count total row number*/
-var rowNumber=0
-for(i=0;i<pic.length;){
-	index=Math.round(Math.random()*(total_array.length-1))
+var rowNumber
+
+var lastWidth
+
+
+/*file name array*/
+var picNameArray = ["0 (2).jpg", "0.jpg", "1 (2).jpg", "1.jpg", "10 (2).jpg", "10.jpg", "11 (2).jpg", "11.jpg", "12 (2).jpg", "12.jpg", "13 (2).jpg", "13.jpg", "14 (2).jpg", "14.jpg", "15 (2).jpg", "15.jpg", "16 (2).jpg", "16.jpg", "17 (2).jpg", "17.jpg", "18 (2).jpg", "18.jpg", "19 (2).jpg", "19.jpg", "2 (2).jpg", "2.jpg", "20 (2).jpg", "20.jpg", "21 (2).jpg", "21.jpg", "22 (2).jpg", "22.jpg", "23 (2).jpg", "23.jpg", "24 (2).jpg", "24.jpg", "25.jpg", "26 (2).jpg", "26.jpg", "27 (2).jpg", "27.jpg", "28 (2).jpg", "28.jpg", "29 (2).jpg", "29.jpg", "3 (2).jpg", "3.jpg", "30 (2).jpg", "30.jpg", "31 (2).jpg", "31.jpg", "32 (2).jpg", "32.jpg", "33 (2).jpg", "33.jpg", "34 (2).jpg", "34.jpg", "35 (2).jpg", "35.jpg", "36 (2).jpg", "36.jpg", "37 (2).jpg", "37.jpg", "38 (2).jpg", "38.jpg", "39 (2).jpg", "39.jpg", "4 (2).jpg", "4.jpg", "40.jpg", "41.jpg", "42.jpg", "43 (2).jpg", "43.jpg", "44.jpg", "45.jpg", "46 (2).jpg", "46.jpg", "47 (2).jpg", "47.jpg", "48 (2).jpg", "48.jpg", "49 (2).jpg", "49.jpg", "5 (2).jpg", "5.jpg", "6 (2).jpg", "6.jpg", "7 (2).jpg", "7.jpg", "8 (2).jpg", "8.jpg", "9 (2).jpg", "9.jpg"  ]
+
+var n=picNameArray.length
+
+
+/*global array of divs of images*/
+var divArray=[]
+
+/*initiazie div array*/
+initialize()
+
+
+function fillContainer(){
+  for(i=0;i<divArray.length;i++){
+    resize(i)
+    document.getElementById('image_container').appendChild(divArray[i])
+  }
+}
+
+function initialize(){
+  randomShuffle()
+  idx=Math.round(Math.random()*(sizeList.length-1))
+  /*size of small square*/
+  widthSmallSquare = sizeList[idx][0]
+  heightSmallSquare = sizeList[idx][1]
+  widthBigSquare = 2*widthSmallSquare+indence
+  heightBigSquare = 2*heightSmallSquare+indence
+  maxHeightWidthRatioForNormalSize = heightBigSquare/widthBigSquare*1.5
+  maxWidthHeightRatioForNormalSize = widthBigSquare/heightBigSquare*1.5
+  maxNumOfBigSquareInARow = Math.floor(window.screen.width/widthBigSquare)
+  maxOfLeft=(widthBigSquare+indence)*(maxNumOfBigSquareInARow-1)+padding+widthSmallSquare+indence
   
-  /*array of sizes for the row*/
-	row_array=total_array[index]  
+  topRelative=0
+  rowNumber=0
+  lastWidth=0
   
-  /*row array length*/
-	lenRow=row_array.length
-  
-  /*variable used to help calculate the position*/
-  total=0
-	for(k=0;k<=lenRow-1;k++){
-    /*calculate picture position*/
-		if(total%sizeBigSquare==0&&total!=0){
-			left+=row_array[k-1]+indence
-			if(row_array[k-1]==sizeSmallSquare)
-        topp-=sizeSmallSquare+indence
-		}
-		if(total%sizeBigSquare!=0)
-      topp+=sizeSmallSquare+indence
+  for(i=0; i<picNameArray.length; i++){
+    var img=document.createElement('img')
+    img.id=i+""
+    //img.style.cssText="width:"+row_array[k]+"px; height:"+row_array[k]+"px";
+    img.src='image\\'+picNameArray[i]
+
+    var image_layer=document.createElement('div')
+    image_layer.setAttribute('class',"image_layer")
+    //image_layer.style.width=row_array[k]+"px"
+    //image_layer.style.height=row_array[k]+"px"
+    image_layer.setAttribute('onmouseover','showlayer(this)')
+    image_layer.setAttribute('onmouseout','hidelayer(this)')
+    image_layer.setAttribute('onclick','pos(this)')
+
+    var div=document.createElement('div')
+    div.setAttribute('class','image')
+    //div.style.cssText="width:"+row_array[k]+"px; height:"+row_array[k]+"px; left:"+left+"px; top:"+topp+"px;";
+
     
-    total+=row_array[k];
-    if(row_array[k]==sizeBigSquare+indence)
-        total-=indence
-		
-		if((i+k)<pic.length){
-      var div=document.createElement('div')
-      div.setAttribute('class','image')
-      div.style.cssText="width:"+row_array[k]+"px; height:"+row_array[k]+"px; left:"+left+"px; top:"+topp+"px;";
-		
-		
-			var img=document.createElement('img')
-			img.id=i+k+""
-			img.style.cssText="width:"+row_array[k]+"px; height:"+row_array[k]+"px";
-			img.src='image\\'+pic[i+k]
-			
-			var image_layer=document.createElement('div')
-			image_layer.setAttribute('class',"image_layer")
-			image_layer.style.width=row_array[k]+"px"
-			image_layer.style.height=row_array[k]+"px"
-			image_layer.setAttribute('onmouseover','showlayer(this)')
-			image_layer.setAttribute('onmouseout','hidelayer(this)')
-			image_layer.setAttribute('onclick','pos(this)')
-			
-			div.appendChild(img)
-			div.appendChild(image_layer)
-		}
+    div.appendChild(img)
+    div.appendChild(image_layer)
     
-		div_array.push(div)
-	}
+    divArray.push(div)
+  }
+}
+
+
+function nextPos(width, height){
+  if(topRelative==0){
+    if(height==heightSmallSquare){
+      topp+=heightSmallSquare+indence
+      topRelative=1
+    }else{
+      left+=width+indence
+    }
+  }else{
+    if(lastWidth==widthBigSquare){
+      if(width==widthBigSquare){
+        topp-=heightSmallSquare+indence
+        topRelative=0
+        left+=widthBigSquare+indence
+      }else{
+        left+=widthSmallSquare+indence
+      }
+    }else{
+      left+=widthSmallSquare+indence
+      topp-=heightSmallSquare+indence
+      topRelative=0
+    }
+  }
   
-  /*calculate the new value of topp*/
-  if(row_array[k-1]==sizeSmallSquare)
-    topp+=sizeSmallSquare+indence
-  else 
-    topp+=sizeBigSquare+2*indence
-	i+=lenRow
-	left=padding
-	rowNumber++
+  if(left>maxOfLeft){
+    left=padding
+    topp+=heightBigSquare+indence
+    rowNumber++
+  }
+  lastWidth=width
+  lastHeight=height
+}
+
+
+function resize(i){
+  if(topRelative==0){
+    resizeFromTop(i)
+  }else{
+    resizeFromMiddle(i)
+  }
+}
+
+function resizeFromMiddle(i){
+  var width
+  var height
+  if(lastWidth==widthBigSquare){   //上一个是水平长条
+    k=i-1
+    do{
+      k++
+      img=divArray[k].children[0]
+      imgWidth=img.naturalWidth
+      imgHeight=img.naturalHeight
+    }while(imgHeight/imgWidth>maxHeightWidthRatioForNormalSize && k<n-1)
+      
+    if(imgHeight/imgWidth<=maxHeightWidthRatioForNormalSize){
+      var div=divArray[k]
+      divArray[k]=divArray[i]
+      divArray[i]=div
+      
+      if(imgWidth/imgHeight>maxWidthHeightRatioForNormalSize){
+        width=widthBigSquare
+      }else{
+        width=widthSmallSquare
+      }
+      height=heightSmallSquare
+    }else{
+      nextPos(widthBigSquare,heightSmallSquare)
+      resizeFromTop(i)
+      return
+    }
+  }else{  //上一个是小方块
+    k=i-1
+    do{
+      k++
+      img=divArray[k].children[0]
+      imgWidth=img.naturalWidth
+      imgHeight=img.naturalHeight
+    }while((imgHeight/imgWidth>maxHeightWidthRatioForNormalSize || imgWidth/imgHeight>maxWidthHeightRatioForNormalSize) && k<n-1)
+      
+    if(imgHeight/imgWidth<=maxHeightWidthRatioForNormalSize && imgWidth/imgHeight<=maxWidthHeightRatioForNormalSize){
+      var div=divArray[k]
+      divArray[k]=divArray[i]
+      divArray[i]=div
+      
+      width=widthSmallSquare
+      height=heightSmallSquare
+    }else{
+      nextPos(widthSmallSquare,heightSmallSquare)
+      resizeFromTop(i)
+      return
+    }
+  }
+  
+  div.children[0].style.cssText="width:"+width+"px; height:"+height+"px";
+  div.style.cssText="left:"+left+"px; top:"+topp+"px;";
+  div.children[1].style.cssText="width:"+width+"px; height:"+height+"px";
+  nextPos(width,height)
+}
+
+
+function resizeFromTop(i){
+  var width
+  var height
+  if(left<maxOfLeft){
+    var div=divArray[i]
+    img=div.children[0]
+    imgWidth=img.naturalWidth
+    imgHeight=img.naturalHeight
+    if(imgWidth/imgHeight>maxWidthHeightRatioForNormalSize){
+      width=widthBigSquare
+      height=heightSmallSquare
+    }else if(imgHeight/imgWidth>maxHeightWidthRatioForNormalSize){
+      width=widthSmallSquare
+      height=heightBigSquare
+    }else{
+      if(Math.round(Math.random())==0){
+        width=widthSmallSquare
+        height=heightSmallSquare
+      }else{
+        width=widthBigSquare
+        height=heightBigSquare
+      }
+    }
+  }else{    //到达一行的末尾
+    k=i-1
+    do{
+      k++
+      img=divArray[k].children[0]
+      imgWidth=img.naturalWidth
+      imgHeight=img.naturalHeight
+    }while(imgWidth/imgHeight>maxWidthHeightRatioForNormalSize && k<n-1)
+      
+    if(imgWidth/imgHeight<=maxWidthHeightRatioForNormalSize){
+      var div=divArray[k]
+      divArray[k]=divArray[i]
+      divArray[i]=div
+      
+      width=widthSmallSquare
+      if(imgHeight/imgWidth>=maxHeightWidthRatioForNormalSize){
+        height=heightBigSquare
+      }else{
+        height=heightSmallSquare
+      }
+    }else{
+      nextPos(widthSmallSquare,heightBigSquare)
+      resizeFromTop(i)
+      return
+    }
+  }
+  div.children[0].style.cssText="width:"+width+"px; height:"+height+"px";
+  div.style.cssText="left:"+left+"px; top:"+topp+"px;";
+  div.children[1].style.cssText="width:"+width+"px; height:"+height+"px";
+  nextPos(width,height)
+}
+
+function randomShuffle(){
+  for(i=0;i<picNameArray.length;i++){
+    tempstr=picNameArray[i]
+    k=Math.round(Math.random()*(picNameArray.length-i-1))+i
+    picNameArray[i]=picNameArray[k]
+    picNameArray[k]=tempstr
+  }
 }
 
 /*pop show*/
@@ -130,15 +295,13 @@ function pos(image_layer){
     }
   }
   
-	document.getElementById('mainPic').src='image\\'+pic[id]
+	document.getElementById('mainPic').src='image\\'+picNameArray[id]
   document.getElementById('mainPic').style.width=newWidth+"px"
   document.getElementById('mainPic').style.height=newHeight+"px"
   
-	document.getElementById('pop').style.top=(windowHeight-newHeight-40)/2-80+"px"
+	document.getElementById('pop').style.top=(windowHeight-newHeight-20)/2+"px"
   document.getElementById('pop').style.left=(windowWidth-newWidth)/2+"px"
 	document.getElementById('pop').style.display="block"
-	document.getElementById('pop').getElementsByTagName('h1')[0].innerHTML=text[id]
-	document.getElementById('pop').getElementsByTagName('div')[0].innerHTML=text[id]
   
   document.getElementById('background_layer').style.zIndex=2;
 	
@@ -182,11 +345,10 @@ function hidelayer(image_layer){
 
 /*initialize on loading*/
 window.onload=function(){
-  for(n=0;n<div_array.length;n++)
-    document.getElementById('image_container').appendChild(div_array[n])
+  fillContainer()
   
-  document.getElementById('image_container').style.width=sizeBigSquare*3+5*indence+2*padding+"px"
-  document.getElementById('image_container').style.height=rowNumber*(sizeBigSquare+2*indence)-indence+2*padding+"px"
+  document.getElementById('image_container').style.width=(widthBigSquare+indence)*maxNumOfBigSquareInARow-indence+2*padding+"px"
+  document.getElementById('image_container').style.height=rowNumber*(heightBigSquare+indence)-indence+2*padding+"px"
 }
   
   
