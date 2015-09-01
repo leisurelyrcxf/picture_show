@@ -1,7 +1,7 @@
 ﻿/* JavaScript Document*/
 
 /*list of block size combination*/
-sizeList=[[160,160*100/160)], [200,200*100/160], [320,200]]
+sizeList=[[160,Math.floor(160*100/160)], [200,Math.floor(200*100/160)], [320,200]]
 
 /*size of small square*/
 var widthSmallSquare
@@ -70,14 +70,14 @@ function initialize(){
   widthSmallSquare = sizeList[idx][0]
   heightSmallSquare = sizeList[idx][1]
   
-  alert(window.screen.width + ", "+window.screen.height)
+  //alert(window.screen.width + ", "+window.screen.height)
   if(window.screen.width<window.screen.height){
     widthSmallSquare = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth-2*padding-indence-20)/2
     heightSmallSquare = widthSmallSquare/160*100
   }
   widthBigSquare = 2*widthSmallSquare+indence
   heightBigSquare = 2*heightSmallSquare+indence
-  alert(widthBigSquare + ", "+heightBigSquare)
+  //alert(widthBigSquare + ", "+heightBigSquare)
   maxHeightWidthRatioForNormalSize = heightBigSquare/widthBigSquare*1.5
   maxWidthHeightRatioForNormalSize = widthBigSquare/heightBigSquare*1.5
   maxNumOfBigSquareInARow = Math.floor(window.screen.width/widthBigSquare)
