@@ -69,6 +69,11 @@ function initialize(){
   /*size of small square*/
   widthSmallSquare = sizeList[idx][0]
   heightSmallSquare = sizeList[idx][1]
+  
+  if(window.screen.width<window.screen.height){
+    widthSmallSquare = (window.screen.width-2*padding-indence)/2
+    heightSmallSquare = widthSmallSquare/160*100
+  }
   widthBigSquare = 2*widthSmallSquare+indence
   heightBigSquare = 2*heightSmallSquare+indence
   maxHeightWidthRatioForNormalSize = heightBigSquare/widthBigSquare*1.5
