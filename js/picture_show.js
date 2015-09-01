@@ -1,7 +1,7 @@
 ﻿/* JavaScript Document*/
 
 /*list of block size combination*/
-sizeList=[[160,160*100/160], [200,200*100/160], [320,200]]
+sizeList=[[160,160*100/160)], [200,200*100/160], [320,200]]
 
 /*size of small square*/
 var widthSmallSquare
@@ -139,7 +139,7 @@ function nextPos(width, height){
   }
   
   hasImageInRow=true
-  if(left>maxOfLeft){
+  if(left>maxOfLeft+widthSmallSquare){
     left=padding
     topp+=heightBigSquare+indence
     rowNumber++
@@ -219,7 +219,7 @@ function resizeFromMiddle(i){
 function resizeFromTop(i){
   var width
   var height
-  if(left<maxOfLeft){
+  if(left<maxOfLeft-widthSmallSquare){
     var div=divArray[i]
     img=div.children[0]
     imgWidth=img.naturalWidth
