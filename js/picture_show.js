@@ -465,7 +465,6 @@ function randomShuffle(){
 
 /*pop show*/
 function pos(imageElement, fadeAwayFlag){
-  //alert(1)
   var scrollTop=Math.max(document.documentElement.scrollTop,document.body.scrollTop)
   originalWidth=imageElement.naturalWidth
   originalHeight=imageElement.naturalHeight
