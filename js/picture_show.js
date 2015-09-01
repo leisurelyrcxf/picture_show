@@ -205,7 +205,7 @@ function loadImages(loadNumber, boolAddListener){
   for(i=loadedImageNumber; i<Math.min(loadNumber+loadedImageNumber,n)-1; i++){
     var img=document.createElement('img')
     img.id=i+""
-    img.src='image\\'+picNameArray[i]
+    img.src='image/'+picNameArray[i]
 
     var image_layer=document.createElement('div')
     image_layer.setAttribute('class',"image_layer")
@@ -227,7 +227,7 @@ function loadImages(loadNumber, boolAddListener){
     
     var img=document.createElement('img')
     img.id=i+""
-    img.src='image\\'+picNameArray[i]
+    img.src='image/'+picNameArray[i]
     
     /*fill imageContainer when last image finish loaded*/
     if(boolAddListener){
