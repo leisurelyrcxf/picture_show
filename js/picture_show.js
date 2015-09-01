@@ -63,7 +63,8 @@ var scrollFlag=true
 
 
 /*file name array*/
-var picNameArray = ["0 (2).jpg", "0.jpg", "1 (2).jpg", "1.jpg" ]
+var picNameArray = ["0 (2).jpg", "1 (2).jpg", "10 (2).jpg", "10.jpg", "11 (2).jpg", "11.jpg", "12 (2).jpg", "12.jpg", "13 (2).jpg", "13.jpg", "14 (2).jpg", "14.jpg", "15 (2).jpg", "15.jpg", "16 (2).jpg", "16.jpg", "17 (2).jpg", "18 (2).jpg", "18.jpg", "19 (2).jpg", "19.jpg", "2 (2).jpg", "2.jpg", "20 (2).jpg", "20.jpg", "21 (2).jpg", "22 (2).jpg", "24 (2).jpg", "26 (2).jpg", "27 (2).jpg", "3 (2).jpg", "4 (2).jpg", "43 (2).jpg", "46 (2).jpg", "47.jpg", "48.jpg", "49.jpg", "5.jpg", "7 (2).jpg", "8 (2).jpg", "8.jpg", "9 (2).jpg", "9.jpg", "IMG_3089.JPG", "IMG_3102.JPG", "IMG_3139.JPG", "IMG_3166.JPG", "IMG_3222.JPG", "IMG_3238.JPG", "IMG_3244.JPG", "IMG_3245.JPG", "IMG_3262.JPG", "IMG_3269.JPG", "IMG_3270.JPG", "IMG_3275.JPG", "IMG_3310.JPG", "IMG_3315.JPG", "IMG_3318.JPG", "IMG_3322.JPG", "IMG_3329.JPG", "IMG_3335.JPG", "IMG_3341.JPG", "IMG_3342.JPG", "IMG_3343.JPG", "IMG_3344.JPG", "IMG_3345.JPG", "IMG_3346.JPG", "IMG_3379.JPG", "IMG_3382.JPG", "IMG_3383.JPG", "IMG_3384.JPG", "IMG_3473.JPG", "IMG_3479.JPG", "IMG_3482.JPG", "IMG_3483.JPG", "IMG_3499.JPG", "IMG_3527.JPG", "IMG_3532.JPG", "IMG_3559.JPG", "IMG_3582.JPG", "IMG_3635.JPG", "IMG_3636.JPG", "IMG_3646.JPG" ]
+
 var n=picNameArray.length
 
 
@@ -117,8 +118,9 @@ function fillContainer(){
     }else{
       /*otherwise we just stop at the bad position and wait for more images filled in the buffer so we can start search again next time*/
       var returnFlag=resize(currentIdx,false)
-      if(!returnFlag) //if reach position without any proper image to fill in
+      if(!returnFlag){ //if reach position without any proper image to fill in{
         break
+      }
       document.getElementById('image_container').appendChild(divArray[currentIdx])
     }
   }
@@ -202,7 +204,7 @@ function loadImages(loadNumber, boolAddListener){
   for(i=loadedImageNumber; i<Math.min(loadNumber+loadedImageNumber,n)-1; i++){
     var img=document.createElement('img')
     img.id=i+""
-    img.src='image\\'+picNameArray[i]
+    img.src='image/'+picNameArray[i]
 
     var image_layer=document.createElement('div')
     image_layer.setAttribute('class',"image_layer")
@@ -220,30 +222,33 @@ function loadImages(loadNumber, boolAddListener){
     divArray.push(div)
   }
   
-  var img=document.createElement('img')
-  img.id=i+""
-  img.src='image\\'+picNameArray[i]
-  
-  /*fill imageContainer when last image finish loaded*/
-  if(boolAddListener){
-    img.onload=function(){
-      setTimeout(fillContainer,100)
+  if(i<=Math.min(loadNumber+loadedImageNumber,n)-1){
+    
+    var img=document.createElement('img')
+    img.id=i+""
+    img.src='image/'+picNameArray[i]
+    
+    /*fill imageContainer when last image finish loaded*/
+    if(boolAddListener){
+      img.onload=function(){
+        setTimeout(fillContainer,100)
+      }
     }
+    
+    var image_layer=document.createElement('div')
+    image_layer.setAttribute('class',"image_layer")
+    image_layer.setAttribute('onmouseover','showlayer(this)')
+    image_layer.setAttribute('onmouseout','hidelayer(this)')
+
+    var div=document.createElement('div')
+    div.setAttribute('class','image')
+
+    
+    div.appendChild(img)
+    div.appendChild(image_layer)
+    
+    divArray.push(div)
   }
-
-  var image_layer=document.createElement('div')
-  image_layer.setAttribute('class',"image_layer")
-  image_layer.setAttribute('onmouseover','showlayer(this)')
-  image_layer.setAttribute('onmouseout','hidelayer(this)')
-
-  var div=document.createElement('div')
-  div.setAttribute('class','image')
-
-  
-  div.appendChild(img)
-  div.appendChild(image_layer)
-  
-  divArray.push(div)
 }
 /*get the position of next image*/
 function nextPos(width, height){
@@ -385,7 +390,7 @@ function resizeFromMiddle(i, moveNextWhenNoMoreProperImageFlag){
 }
 
 /*resize when image is at top*/
-function resizeFromTop(i){
+function resizeFromTop(i, moveNextWhenNoMoreProperImageFlag){
   var width
   var height
   if(left<maxOfLeft-widthSmallSquare){
@@ -492,14 +497,15 @@ function pos(imageElement, fadeAwayFlag){
   document.getElementById('pop').style.display="block"
   
   document.getElementById('background_layer').style.zIndex=2;
-  document.getElementById('close').setAttribute('onclick','closeShow('+counter+')')
+  
+  
   
   
   if(fadeAwayFlag){
     i=0;
+    
     /*clear last counter if needed*/
     clearInterval(counter)
-    
     /*interval for the fading away effect*/
     counter=setInterval(
       function(){
@@ -510,14 +516,14 @@ function pos(imageElement, fadeAwayFlag){
       },30
     )
   }
-  
+  document.getElementById('close').setAttribute('onclick','closeShow('+counter+')')
 }
 
 /*close the pop show*/
 function closeShow(counterNumber){
   document.getElementById('pop').style.display="none"
-  document.getElementById('background_layer').style.cssText+='filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0; opacity:0;z-index:-1;'
   clearInterval(counterNumber)
+  document.getElementById('background_layer').style.cssText+='filter:alpha(opacity=0); -moz-opacity:0; -khtml-opacity:0; opacity:0;z-index:-1;'
 }
   
 /*getting dark when mouseover*/
