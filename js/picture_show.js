@@ -119,7 +119,6 @@ function fillContainer(){
       /*otherwise we just stop at the bad position and wait for more images filled in the buffer so we can start search again next time*/
       var returnFlag=resize(currentIdx,false)
       if(!returnFlag){ //if reach position without any proper image to fill in{
-        alert(1)
         break
       }
       document.getElementById('image_container').appendChild(divArray[currentIdx])
@@ -391,7 +390,7 @@ function resizeFromMiddle(i, moveNextWhenNoMoreProperImageFlag){
 }
 
 /*resize when image is at top*/
-function resizeFromTop(i){
+function resizeFromTop(i, moveNextWhenNoMoreProperImageFlag){
   var width
   var height
   if(left<maxOfLeft-widthSmallSquare){
