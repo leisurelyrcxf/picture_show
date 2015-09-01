@@ -72,7 +72,7 @@ function initialize(){
   
   alert(window.screen.width + ", "+window.screen.height)
   if(window.screen.width<window.screen.height){
-    widthSmallSquare = (window.screen.width-2*padding-indence-20)/2
+    widthSmallSquare = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth-2*padding-indence-20)/2
     heightSmallSquare = widthSmallSquare/160*100
   }
   widthBigSquare = 2*widthSmallSquare+indence
