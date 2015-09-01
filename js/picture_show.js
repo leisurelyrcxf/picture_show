@@ -223,30 +223,33 @@ function loadImages(loadNumber, boolAddListener){
     divArray.push(div)
   }
   
-  var img=document.createElement('img')
-  img.id=i+""
-  img.src='image\\'+picNameArray[i]
-  
-  /*fill imageContainer when last image finish loaded*/
-  if(boolAddListener){
-    img.onload=function(){
-      setTimeout(fillContainer,100)
+  if(i<=Math.min(loadNumber+loadedImageNumber,n)-1){
+    
+    var img=document.createElement('img')
+    img.id=i+""
+    img.src='image\\'+picNameArray[i]
+    
+    /*fill imageContainer when last image finish loaded*/
+    if(boolAddListener){
+      img.onload=function(){
+        setTimeout(fillContainer,100)
+      }
     }
+    
+    var image_layer=document.createElement('div')
+    image_layer.setAttribute('class',"image_layer")
+    image_layer.setAttribute('onmouseover','showlayer(this)')
+    image_layer.setAttribute('onmouseout','hidelayer(this)')
+
+    var div=document.createElement('div')
+    div.setAttribute('class','image')
+
+    
+    div.appendChild(img)
+    div.appendChild(image_layer)
+    
+    divArray.push(div)
   }
-
-  var image_layer=document.createElement('div')
-  image_layer.setAttribute('class',"image_layer")
-  image_layer.setAttribute('onmouseover','showlayer(this)')
-  image_layer.setAttribute('onmouseout','hidelayer(this)')
-
-  var div=document.createElement('div')
-  div.setAttribute('class','image')
-
-  
-  div.appendChild(img)
-  div.appendChild(image_layer)
-  
-  divArray.push(div)
 }
 /*get the position of next image*/
 function nextPos(width, height){
