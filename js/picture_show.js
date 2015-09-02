@@ -1,7 +1,7 @@
 ﻿/* JavaScript Document*/
 
 /*list of block size combination*/
-sizeList=[[160,Math.floor(160*100/160)], [200,Math.floor(200*100/160)], [320,200]]
+sizeList=[[320,200], [200,Math.floor(200*100/160)]]
 
 /*size of small square*/
 var widthSmallSquare
@@ -53,6 +53,8 @@ var lastWidth
 /*index of current processing image*/
 var currentIdx=0
 
+var currentIdxOffset=0
+
 /*number of row loaded per time*/
 var loadRowNumPerTime
 
@@ -63,8 +65,7 @@ var scrollFlag=true
 
 
 /*file name array*/
-var picNameArray = ["0 (2).jpg", "0.jpg", "1 (2).jpg", "1.jpg" ] 
-
+var picNameArray = ["0 (2).jpg", "0.jpg", "1 (2).jpg", "1.jpg" ]
 var n=picNameArray.length
 
 
@@ -74,39 +75,6 @@ var divArray=[]
 /*initiazie div array*/
 initialize()
 
-function getScrollTop(){
-  var scrollTop = 0, bodyScrollTop = 0, documentScrollTop = 0;
-  if(document.body){
-    bodyScrollTop = document.body.scrollTop;
-  }
-  if(document.documentElement){
-    documentScrollTop = document.documentElement.scrollTop;
-  }
-　scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop;
-  return scrollTop;
-}
-//文档的总高度
-function getScrollHeight(){
-  var scrollHeight = 0, bodyScrollHeight = 0, documentScrollHeight = 0;
-  if(document.body){
-    bodyScrollHeight = document.body.scrollHeight;
-　}
-  if(document.documentElement){
-　　documentScrollHeight = document.documentElement.scrollHeight;
-　}
-　scrollHeight = (bodyScrollHeight - documentScrollHeight > 0) ? bodyScrollHeight : documentScrollHeight;
-  return scrollHeight;
-}
-//浏览器视口的高度
-function getWindowHeight(){
-  var windowHeight = 0;
-  if(document.compatMode == "CSS1Compat"){
-  windowHeight = document.documentElement.clientHeight;
-  }else{
-    windowHeight = document.body.clientHeight;
-  }
-  return windowHeight;
-}
 
 /*fill divs in container*/
 function fillContainer(){
@@ -124,18 +92,21 @@ function fillContainer(){
       document.getElementById('image_container').appendChild(divArray[currentIdx])
     }
   }
+  currentIdxOffset=divArray.length-currentIdx
   
   if(hasImageInRow)
     document.getElementById('image_container').style.height=(rowNumber+1)*(heightBigSquare+indence)-indence+2*padding+"px"
   else{
     document.getElementById('image_container').style.height=(rowNumber)*(heightBigSquare+indence)-indence+2*padding+"px"
   }
+  scrollFlag=true
+  
 }
 
 /*initialize*/
 function initialize(){
   randomShuffle()
-  idx=Math.round(Math.random()*(sizeList.length-1))
+  idx=Math.round(Math.random()*(sizeList.length-2))
   /*size of small square*/
   widthSmallSquare = sizeList[idx][0]
   heightSmallSquare = sizeList[idx][1]
@@ -154,43 +125,48 @@ function initialize(){
   loadRowNumPerTime=window.screen.height/heightBigSquare+1
   loadNumPerTime=Math.floor(loadRowNumPerTime*maxNumOfBigSquareInARow)
 
-  
+  /*deprecated
   var scrollFunc = function(){ 
     if(scrollFlag){ 
+      //clearTimeout(tForTimeOut)
       scrollFlag=false
-      loadImages(loadNumPerTime, true)
-      setTimeout(function(){
-        scrollFlag=true
-        },500
-      )
+      if(divArray.length<n)
+        loadImages(Math.round(loadNumPerTime*1.5), true)
     }
   }
   
-  window.onscroll = scrollFunc
-
+  //window.onscroll = scrollFunc
+  */
   
   
-  var wheelFunc = function (e) {  
-    e = e || window.event;  
-    if(e.wheelDelta){  //判断浏览器IE，谷歌滑轮事件               
-      if(e.wheelDelta>=0){ //当滑轮向上滚动时  
-          return 
+  var wheelFunc = function (e) {
+    if(scrollFlag){
+      e = e || window.event;  
+      if(e.wheelDelta){  //判断浏览器IE，谷歌滑轮事件               
+        if(e.wheelDelta<=0 && currentIdxOffset==divArray.length-currentIdx && divArray.length<n){ //当滑轮向上滚动时
+          //if ($(document).scrollTop() >= $(document).height() - $(window).height()*)
+          scrollFlag=false
+          loadImages(Math.round(loadNumPerTime+2), true)
+        }
+      }else if(e.detail){  //Firefox滑轮事件  
+        if (e.detail>=0 && currentIdxOffset==divArray.length-currentIdx && divArray.length<n){ //当滑轮向上滚动时  
+          scrollFlag=false
+          loadImages(Math.round(loadNumPerTime+2), true)
+        }
       }
-    }else if(e.detail){  //Firefox滑轮事件  
-      if (e.detail>= 0){ //当滑轮向上滚动时  
-        return
-      }
-    }
-    if(getScrollTop() + getWindowHeight() == getScrollHeight()){  //scroll在页面底部
-      scrollFunc()
     }
   }
+  
+  
   
   if (document.addEventListener) {//firefox  
     document.addEventListener('DOMMouseScroll', wheelFunc, false);  
-  }  
-  //滚动滑轮触发scrollFunc方法  //ie 谷歌  
-  window.onmousewheel = document.onmousewheel = wheelFunc;  
+  }
+  if(window.onmousewheel){
+    window.onmousewheel = wheelFunc
+  }else{
+    document.onmousewheel = wheelFunc 
+  }
   
   
   topRelative=0
@@ -465,7 +441,7 @@ function randomShuffle(){
 
 /*pop show*/
 function pos(imageElement, fadeAwayFlag){
-  var scrollTop=Math.max(document.documentElement.scrollTop,document.body.scrollTop)
+  //var scrollTop=Math.max(document.documentElement.scrollTop,document.body.scrollTop)
   originalWidth=imageElement.naturalWidth
   originalHeight=imageElement.naturalHeight
   windowWidth=window.innerWidth
