@@ -100,7 +100,11 @@ function fillContainer(){
   else{
     document.getElementById('image_container').style.height=(rowNumber)*(heightBigSquare+indence)-indence+2*padding+"px"
   }
-  scrollFlag=true
+  if(currentIdx==n){
+    scrollFlag=false
+  }else{
+    scrollFlag=true
+  }
   
 }
 
