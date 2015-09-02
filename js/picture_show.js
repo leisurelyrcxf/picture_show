@@ -165,6 +165,7 @@ function initialize(){
   }
   
   if(isTouchDevice()){
+    alert(1)
     document.addEventListener('touchmove', wheelAndTouchFunc, false); 
   }else{
     if (document.addEventListener) {//firefox  
