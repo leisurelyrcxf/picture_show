@@ -121,6 +121,11 @@ function initialize(){
   widthSmallSquare = sizeList[idx][0]
   heightSmallSquare = sizeList[idx][1]
   
+  if(h>w){
+    widthSmallSquare = (w-padding*2-indence)/2
+    heightSmallSquare = widthSmallSquare*100/160
+  }
+    
   widthBigSquare = 2*widthSmallSquare+indence
   heightBigSquare = 2*heightSmallSquare+indence
   maxHeightWidthRatioForNormalSize = heightBigSquare/widthBigSquare*1.5
