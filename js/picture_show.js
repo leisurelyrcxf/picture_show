@@ -146,6 +146,37 @@ function initialize(){
   
   window.onscroll = scrollFunc
   */
+  var wheelAndTouchFunc=function(e) {
+    if(scrollFlag){
+      e = e || window.event;  
+      if(e.wheelDelta){  //判断浏览器IE，谷歌滑轮事件               
+        if(e.wheelDelta<=0 && currentIdxOffset==divArray.length-currentIdx && divArray.length<n){ //当滑轮向上滚动时
+          //if ($(document).scrollTop() >= $(document).height() - $(window).height()*)
+          scrollFlag=false
+          loadImages(Math.round(loadNumPerTime), true)
+        }
+      }else if(e.detail){  //Firefox滑轮事件  
+        if (e.detail>=0 && currentIdxOffset==divArray.length-currentIdx && divArray.length<n){ //当滑轮向上滚动时  
+          scrollFlag=false
+          loadImages(Math.round(loadNumPerTime), true)
+        }
+      }
+    }
+  }
+  
+  if(isTouchDevice()){
+    document.addEventListener('touchmove', wheelAndTouchFunc, false); 
+  }else{
+    if (document.addEventListener) {//firefox  
+      document.addEventListener('DOMMouseScroll', wheelAndTouchFunc, false);  
+    }
+    if(window.onmousewheel){
+      window.onmousewheel = wheelAndTouchFunc
+    }else{
+      document.onmousewheel = wheelAndTouchFunc 
+    }
+  }
+  
   
   topRelative=0
   rowNumber=0
@@ -248,7 +279,6 @@ function nextPos(width, height){
     hasImageInRow=false
   }
   lastWidth=width
-  lastHeight=height
 }
 
 function onclickMainPicture(id, evt){
@@ -271,7 +301,6 @@ function onclickMainPicture(id, evt){
       }
     }
   }
-    
 }
 
 /*resize image height and width*/
@@ -503,23 +532,7 @@ function hidelayer(image_layer){
 }
   
 
-function wheelAndTouchFunc(e) {
-  if(scrollFlag){
-    e = e || window.event;  
-    if(e.wheelDelta){  //判断浏览器IE，谷歌滑轮事件               
-      if(e.wheelDelta<=0 && currentIdxOffset==divArray.length-currentIdx && divArray.length<n){ //当滑轮向上滚动时
-        //if ($(document).scrollTop() >= $(document).height() - $(window).height()*)
-        scrollFlag=false
-        loadImages(Math.round(loadNumPerTime), true)
-      }
-    }else if(e.detail){  //Firefox滑轮事件  
-      if (e.detail>=0 && currentIdxOffset==divArray.length-currentIdx && divArray.length<n){ //当滑轮向上滚动时  
-        scrollFlag=false
-        loadImages(Math.round(loadNumPerTime), true)
-      }
-    }
-  }
-}
+
 
 /*initialize on loading*/
 window.onload=function(){
@@ -527,18 +540,7 @@ window.onload=function(){
   document.getElementById('image_container').style.height=4*(heightBigSquare+indence)-indence+2*padding+"px"
   fillContainer()
   
-  if(isTouchDevice()){
-    document.addEventListener('touchmove', wheelAndTouchFunc, false); 
-  }else{
-    if (document.addEventListener) {//firefox  
-      document.addEventListener('DOMMouseScroll', wheelAndTouchFunc, false);  
-    }
-    if(window.onmousewheel){
-      window.onmousewheel = wheelAndTouchFunc
-    }else{
-      document.onmousewheel = wheelAndTouchFunc 
-    }
-  }
+  
 }
   
   
