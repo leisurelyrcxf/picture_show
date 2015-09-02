@@ -136,20 +136,18 @@ function initialize(){
   loadNumPerTime=Math.floor(loadRowNumPerTime*maxNumOfBigSquareInARow)+2
   
 
-  /*deprecated
+  
   var scrollFunc = function(){ 
-    if(scrollFlag){ 
-      //clearTimeout(tForTimeOut)
+    if(scrollFlag && currentIdxOffset==divArray.length-currentIdx && divArray.length<n){
       scrollFlag=false
-      if(divArray.length<n)
-        loadImages(Math.round(loadNumPerTime*1.5), true)
+      loadImages(Math.round(loadNumPerTime), true)
     }
   }
   
-  //window.onscroll = scrollFunc
-  */
+  window.onscroll = scrollFunc
   
   
+  /*
   var wheelFunc = function (e) {
     if(scrollFlag){
       e = e || window.event;  
@@ -169,7 +167,6 @@ function initialize(){
   }
   
   
-  
   if (document.addEventListener) {//firefox  
     document.addEventListener('DOMMouseScroll', wheelFunc, false);  
   }
@@ -178,7 +175,7 @@ function initialize(){
   }else{
     document.onmousewheel = wheelFunc 
   }
-  
+  */
   
   topRelative=0
   rowNumber=0
