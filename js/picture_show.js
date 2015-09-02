@@ -125,6 +125,13 @@ function initialize(){
   maxOfLeft=(widthBigSquare+indence)*(maxNumOfBigSquareInARow-1)+padding+widthSmallSquare+indence
   loadRowNumPerTime=window.screen.height/heightBigSquare+1
   loadNumPerTime=Math.floor(loadRowNumPerTime*maxNumOfBigSquareInARow)
+  if(window.screen.width<window.screen.height){
+    maxNumOfBigSquareInARow = Math.floor((window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth)/widthBigSquare)
+    maxOfLeft=(widthBigSquare+indence)*(maxNumOfBigSquareInARow-1)+padding+widthSmallSquare+indence
+    loadRowNumPerTime=(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight)/heightBigSquare+1
+    loadNumPerTime=Math.floor(loadRowNumPerTime*maxNumOfBigSquareInARow)
+  }
+  
 
   /*deprecated
   var scrollFunc = function(){ 
