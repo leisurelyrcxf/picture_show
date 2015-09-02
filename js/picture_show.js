@@ -108,29 +108,27 @@ function fillContainer(){
 function initialize(){
   randomShuffle()
   idx=Math.round(Math.random()*(sizeList.length-2))
+  
+  var w = screen.width;
+  var h = screen.height;
+  
+
+  var ratio = window.devicePixelRatio || 1;
+  var w = screen.width * ratio;
+  var h = screen.height * ratio;
+  
   /*size of small square*/
   widthSmallSquare = sizeList[idx][0]
   heightSmallSquare = sizeList[idx][1]
   
-  /*adjust for mobile device*/
-  if(window.screen.width<window.screen.height){
-    widthSmallSquare = Math.floor((window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth-2*padding-3*indence-20)/2)
-    heightSmallSquare = Math.round(widthSmallSquare/160*100)
-  }
   widthBigSquare = 2*widthSmallSquare+indence
   heightBigSquare = 2*heightSmallSquare+indence
   maxHeightWidthRatioForNormalSize = heightBigSquare/widthBigSquare*1.5
   maxWidthHeightRatioForNormalSize = widthBigSquare/heightBigSquare*1.5
-  maxNumOfBigSquareInARow = Math.floor(window.screen.width/widthBigSquare)
+  maxNumOfBigSquareInARow = Math.floor(w/widthBigSquare)
   maxOfLeft=(widthBigSquare+indence)*(maxNumOfBigSquareInARow-1)+padding+widthSmallSquare+indence
-  loadRowNumPerTime=window.screen.height/heightBigSquare+1
+  loadRowNumPerTime=h/heightBigSquare+1
   loadNumPerTime=Math.floor(loadRowNumPerTime*maxNumOfBigSquareInARow)
-  if(window.screen.width<window.screen.height){
-    maxNumOfBigSquareInARow = Math.floor((window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth)/widthBigSquare)
-    maxOfLeft=(widthBigSquare+indence)*(maxNumOfBigSquareInARow-1)+padding+widthSmallSquare+indence
-    loadRowNumPerTime=(window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight)/heightBigSquare+1
-    loadNumPerTime=Math.floor(loadRowNumPerTime*maxNumOfBigSquareInARow)
-  }
   
 
   /*deprecated
