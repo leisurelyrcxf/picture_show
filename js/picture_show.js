@@ -113,13 +113,9 @@ function initialize(){
   randomShuffle()
   idx=Math.round(Math.random()*(sizeList.length-2))
   
-  var w = screen.width;
-  var h = screen.height;
-  
-
   var ratio = window.devicePixelRatio || 1;
-  var w = screen.width * ratio;
-  var h = screen.height * ratio;
+  var w = screen.width //* ratio
+  var h = screen.height //* ratio
   
   /*size of small square*/
   widthSmallSquare = sizeList[idx][0]
