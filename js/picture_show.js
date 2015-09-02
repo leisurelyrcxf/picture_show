@@ -136,7 +136,7 @@ function initialize(){
   loadNumPerTime=Math.floor(loadRowNumPerTime*maxNumOfBigSquareInARow)+2
   
 
-  
+  /*
   var scrollFunc = function(){ 
     if(scrollFlag && currentIdxOffset==divArray.length-currentIdx && divArray.length<n){
       scrollFlag=false
@@ -145,36 +145,6 @@ function initialize(){
   }
   
   window.onscroll = scrollFunc
-  
-  
-  /*
-  var wheelFunc = function (e) {
-    if(scrollFlag){
-      e = e || window.event;  
-      if(e.wheelDelta){  //判断浏览器IE，谷歌滑轮事件               
-        if(e.wheelDelta<=0 && currentIdxOffset==divArray.length-currentIdx && divArray.length<n){ //当滑轮向上滚动时
-          //if ($(document).scrollTop() >= $(document).height() - $(window).height()*)
-          scrollFlag=false
-          loadImages(Math.round(loadNumPerTime), true)
-        }
-      }else if(e.detail){  //Firefox滑轮事件  
-        if (e.detail>=0 && currentIdxOffset==divArray.length-currentIdx && divArray.length<n){ //当滑轮向上滚动时  
-          scrollFlag=false
-          loadImages(Math.round(loadNumPerTime), true)
-        }
-      }
-    }
-  }
-  
-  
-  if (document.addEventListener) {//firefox  
-    document.addEventListener('DOMMouseScroll', wheelFunc, false);  
-  }
-  if(window.onmousewheel){
-    window.onmousewheel = wheelFunc
-  }else{
-    document.onmousewheel = wheelFunc 
-  }
   */
   
   topRelative=0
@@ -182,6 +152,17 @@ function initialize(){
   lastWidth=0
   loadImages(Math.floor(loadNumPerTime*1.5), false)
 }
+
+
+function isTouchDevice(){ 
+  try {  
+    document.createEvent("TouchEvent");  
+    return true 
+  }
+  catch (e){  
+    return false
+  }  
+}  
 
 function loadImages(loadNumber, boolAddListener){
   loadedImageNumber=divArray.length
@@ -522,16 +503,42 @@ function hidelayer(image_layer){
 }
   
 
-  
+function wheelAndTouchFunc(e) {
+  if(scrollFlag){
+    e = e || window.event;  
+    if(e.wheelDelta){  //判断浏览器IE，谷歌滑轮事件               
+      if(e.wheelDelta<=0 && currentIdxOffset==divArray.length-currentIdx && divArray.length<n){ //当滑轮向上滚动时
+        //if ($(document).scrollTop() >= $(document).height() - $(window).height()*)
+        scrollFlag=false
+        loadImages(Math.round(loadNumPerTime), true)
+      }
+    }else if(e.detail){  //Firefox滑轮事件  
+      if (e.detail>=0 && currentIdxOffset==divArray.length-currentIdx && divArray.length<n){ //当滑轮向上滚动时  
+        scrollFlag=false
+        loadImages(Math.round(loadNumPerTime), true)
+      }
+    }
+  }
+}
 
 /*initialize on loading*/
 window.onload=function(){
   document.getElementById('image_container').style.width=(widthBigSquare+indence)*maxNumOfBigSquareInARow-indence+2*padding+"px"
   document.getElementById('image_container').style.height=4*(heightBigSquare+indence)-indence+2*padding+"px"
-  
-  
   fillContainer()
   
+  if(isTouchDevice()){
+    document.addEventListener('touchmove', wheelAndTouchFunc, false); 
+  }else{
+    if (document.addEventListener) {//firefox  
+      document.addEventListener('DOMMouseScroll', wheelAndTouchFunc, false);  
+    }
+    if(window.onmousewheel){
+      window.onmousewheel = wheelAndTouchFunc
+    }else{
+      document.onmousewheel = wheelAndTouchFunc 
+    }
+  }
 }
   
   
