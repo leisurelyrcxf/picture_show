@@ -133,7 +133,7 @@ function initialize(){
   maxNumOfBigSquareInARow = Math.floor(w/widthBigSquare)
   maxOfLeft=(widthBigSquare+indence)*(maxNumOfBigSquareInARow-1)+padding+widthSmallSquare+indence
   loadRowNumPerTime=h/heightBigSquare+1
-  loadNumPerTime=Math.floor(loadRowNumPerTime*maxNumOfBigSquareInARow)
+  loadNumPerTime=Math.floor(loadRowNumPerTime*maxNumOfBigSquareInARow)+2
   
 
   /*deprecated
@@ -157,12 +157,12 @@ function initialize(){
         if(e.wheelDelta<=0 && currentIdxOffset==divArray.length-currentIdx && divArray.length<n){ //当滑轮向上滚动时
           //if ($(document).scrollTop() >= $(document).height() - $(window).height()*)
           scrollFlag=false
-          loadImages(Math.round(loadNumPerTime+2), true)
+          loadImages(Math.round(loadNumPerTime), true)
         }
       }else if(e.detail){  //Firefox滑轮事件  
         if (e.detail>=0 && currentIdxOffset==divArray.length-currentIdx && divArray.length<n){ //当滑轮向上滚动时  
           scrollFlag=false
-          loadImages(Math.round(loadNumPerTime+2), true)
+          loadImages(Math.round(loadNumPerTime), true)
         }
       }
     }
