@@ -146,35 +146,41 @@ function initialize(){
   
   window.onscroll = scrollFunc
   */
-  var wheelAndTouchFunc=function(e) {
+  var wheelFunc=function(e) {
     if(scrollFlag){
       e = e || window.event;  
       if(e.wheelDelta){  //判断浏览器IE，谷歌滑轮事件               
         if(e.wheelDelta<=0 && currentIdxOffset==divArray.length-currentIdx && divArray.length<n){ //当滑轮向上滚动时
           //if ($(document).scrollTop() >= $(document).height() - $(window).height()*)
           scrollFlag=false
-          loadImages(Math.round(loadNumPerTime), true)
+          loadImages(loadNumPerTime, true)
         }
       }else if(e.detail){  //Firefox滑轮事件  
         if (e.detail>=0 && currentIdxOffset==divArray.length-currentIdx && divArray.length<n){ //当滑轮向上滚动时  
           scrollFlag=false
-          loadImages(Math.round(loadNumPerTime), true)
+          loadImages(loadNumPerTime, true)
         }
       }
     }
   }
   
+  var touchFunc=function(e){
+    if(scrollFlag && currentIdxOffset==divArray.length-currentIdx && divArray.length<n){
+      scrollFlag=false
+      loadImages(loadNumPerTime, true)
+    }
+  }
+  
   if(isTouchDevice()){
-    alert(1)
-    document.addEventListener('touchmove', wheelAndTouchFunc, false); 
+    document.addEventListener('touchmove', touchFunc, false);
   }else{
     if (document.addEventListener) {//firefox  
-      document.addEventListener('DOMMouseScroll', wheelAndTouchFunc, false);  
+      document.addEventListener('DOMMouseScroll', wheelFunc, false);  
     }
     if(window.onmousewheel){
-      window.onmousewheel = wheelAndTouchFunc
+      window.onmousewheel = wheelFunc
     }else{
-      document.onmousewheel = wheelAndTouchFunc 
+      document.onmousewheel = wheelFunc 
     }
   }
   
