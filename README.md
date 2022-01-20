@@ -8,4 +8,4 @@
 算法会智能填满所有的空位哦
 鼠标划过会加上半透明层~
 点开可以放大,背景会fade away~
-github：https://github.com/leisurelyrcxf/picture_show"
+https://leisurelyrcxf.github.io/picture_show/
